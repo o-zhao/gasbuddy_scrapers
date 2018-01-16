@@ -2,7 +2,7 @@
 # last edited 27 Jul 2017
  
 # SET WORKING DIRECTORY
-setwd("C:\\Users\\ozhao\\Dropbox (MIT)\\14Thu\\gbscrape")
+setwd("")
 
 library("rvest")
 library("dplyr")
@@ -51,7 +51,7 @@ featlist <- c("Car Wash", "C-Store", "Restrooms", "Air", "Pay At Pump", "Restaur
 
 # SCRAPE FUNCTION
 system.time(
-  for (id in 1:5000){
+  for (id in 1:195000){
     url <- paste0("https://www.gasbuddy.com/Station/", id)
     
     lines <- readLines("scrape.js")
@@ -139,4 +139,4 @@ stations$dist5 <- gsub("\\(|\\)|[A-z]", "", stations$dist5)
 
 stations <- apply(stations, 2, as.character)
 stations <- as.data.frame(stations)
-write.csv(stations, file = "stations5000_redo.csv")
+write.csv(stations, file = "filename.csv")
