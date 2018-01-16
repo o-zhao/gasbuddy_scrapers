@@ -1,5 +1,5 @@
 # SET WORKING DIRECTORY
-setwd("C:\\Users\\ozhao\\Dropbox (MIT)\\14Thu\\retailscrape")
+setwd("")
 
 library("rvest")
 library("dplyr")
@@ -19,11 +19,11 @@ usprices <- as.data.frame(matrix("", nrow = 170965, ncol = 3))
 colnames(usprices) <- c("id", "regpr", "timestamp")
 usprices <- data.frame(lapply(usprices, as.character), stringsAsFactors=FALSE)
 
-idlist <- read.csv("holygrail.csv")
+idlist <- read.csv("usa_id.csv")
 idlist <- as.character(idlist$x)
 
-writeas <- "wave_nov29.csv"
-writeas_kiwi <- "wave_nov29_kiwi.csv"
+writeas <- "filename.csv"
+writeas_secondpass <- "filename_secondpass.csv"
 
 # # SCRAPE FUNCTION
 # system.time(
@@ -63,7 +63,7 @@ system.time(
     }
     
     else {
-      usprices$id[index] <- "KIWI"
+      usprices$id[index] <- "MISSING"
     }
     
     if(i %in% c(30000, 60000, 90000, 120000, 150000, 170961)){
@@ -81,16 +81,16 @@ write.csv(usprices, file=writeas)
 
 
 #####################
-kiwi <- which(usprices_backup$id=="KIWI")
-kiwilist <- idlist[kiwi]
+missing <- which(usprices_backup$id=="MISSING")
+missinglist <- idlist[missing]
 
 usprices2 <- as.data.frame(matrix("", nrow = 100000, ncol = 3))
 colnames(usprices2) <- c("id", "regpr", "timestamp")
 usprices2 <- data.frame(lapply(usprices2, as.character), stringsAsFactors=FALSE)
 
 system.time(
-  for (i in 1:length(kiwilist)){
-    id <- kiwilist[i]
+  for (i in 1:length(missinglist)){
+    id <- missinglist[i]
     url <- paste0("https://www.gasbuddy.com/Station/", id)
     # 
     # lines <- readLines("scrape.js")
@@ -112,7 +112,7 @@ system.time(
     }
     
     else {
-      usprices2$id[index] <- "KIWI"
+      usprices2$id[index] <- "MISSING"
     }
     
     print(i)
@@ -121,4 +121,4 @@ system.time(
 )
 
 usprices2_backup <- usprices2
-write.csv(usprices2, file=writeas_kiwi)
+write.csv(usprices2, file=writeas_secondpass)
